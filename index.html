@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>真空上料机 3D 动态仿真</title>
+  <style>
+    /* ---------- 极简工业风 UI，仅保留必要控件 ---------- */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; overflow: hidden; font-family: "Microsoft YaHei", "PingFang SC", sans-serif; }
+    #app { position: fixed; inset: 0; }
+    canvas { display: block; }
+
+    .panel {
+      position: fixed; top: 16px; left: 16px; z-index: 10;
+      width: 264px; padding: 14px 16px;
+      background: rgba(24, 29, 36, 0.82); color: #e8ecf1;
+      border: 1px solid rgba(255,255,255,0.08); border-radius: 10px;
+      backdrop-filter: blur(6px); user-select: none;
+    }
+    .panel h1 { font-size: 15px; font-weight: 600; letter-spacing: .5px; margin-bottom: 10px; }
+    .row { display: flex; gap: 8px; margin-bottom: 12px; }
+    button {
+      flex: 1; padding: 7px 0; font-size: 13px; cursor: pointer;
+      color: #e8ecf1; background: #2f6fb3; border: 1px solid rgba(255,255,255,.12);
+      border-radius: 6px; transition: background .15s;
+    }
+    button:hover { background: #3d82c9; }
+    button.ghost { background: #3a414b; }
+    button.ghost:hover { background: #48505c; }
+
+    .slider-row { margin-bottom: 10px; }
+    .slider-row label { display: flex; justify-content: space-between; font-size: 12px; color: #b8c0ca; margin-bottom: 5px; }
+    input[type=range] { width: 100%; accent-color: #4a90d9; cursor: pointer; }
+
+    .status { font-size: 12px; color: #9aa4b0; line-height: 1.7; border-top: 1px solid rgba(255,255,255,.08); padding-top: 8px; }
+    .status b { color: #d6dde6; font-weight: 600; }
+    .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 5px; vertical-align: 1px; }
+    .dot.powder { background: #d8b07a; }
+    .dot.air { background: #cfe6f5; }
+    .hint {
+      position: fixed; bottom: 12px; left: 50%; transform: translateX(-50%); z-index: 10;
+      font-size: 12px; color: rgba(40,48,58,.65); background: rgba(255,255,255,.6);
+      padding: 5px 14px; border-radius: 20px; pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+
+  <div class="panel">
+    <h1>真空上料机工作原理仿真</h1>
+    <div class="row">
+      <button id="btnToggle">暂停</button>
+      <button id="btnReset" class="ghost">重置粒子</button>
+    </div>
+    <div class="slider-row">
+      <label><span>输送风速</span><span id="windVal">1.6 m/s</span></label>
+      <input id="windSlider" type="range" min="40" max="200" value="100" />
+    </div>
+    <div class="status">
+      <div>状态：<b id="stRun">运行中</b> ｜ 风机：<b id="stFan">运转</b></div>
+      <div>管路粉体：<b id="stPowder">0</b> 粒 ｜ 仓内沉降：<b id="stSettled">0</b> 粒</div>
+      <div style="margin-top:4px;"><span class="dot powder"></span>粉体物料　<span class="dot air"></span>气流（空气）</div>
+    </div>
+  </div>
+
+  <div class="hint">鼠标左键拖拽旋转 · 滚轮缩放 · 右键平移</div>
+
+  <!-- Three.js 固定版本，通过 CDN 引入，无打包依赖 -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    }
+  }
+  </script>
+  <script type="module" src="./js/main.js"></script>
+</body>
+</html>

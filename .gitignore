@@ -23,3 +23,9 @@ dist/
 # ---- 日志与临时文件 ----
 *.log
 *.tmp
+
+# ---- 无头浏览器验证产物 ----
+tools/.edge-profile*/
+tools/.cdp-profile*/
+tools/.cdp-shots/
+tools/*.png
